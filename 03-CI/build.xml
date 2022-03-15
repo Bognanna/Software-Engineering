@@ -1,0 +1,54 @@
+﻿<project name="Grain-Bank" default="compile">
+	<path id="jetty.cp">
+		<fileset dir="../Jetty"/>
+	</path>
+	<path id="lib.cp">
+		<pathelement location="lib/freemarker.jar"/>
+		<pathelement location="lib/servlet-api-2.5.jar"/>
+		<path refid="jetty.cp"/>
+	</path>
+	<path id="dist.cp">
+		<path refid="lib.cp"/>
+		<pathelement location="bank.jar"/>
+	</path>
+	<target name="init">
+		<echo message="Project ${ant.project.name} initialization." />
+		<echo message="Scope of this target:" />
+		<mkdir dir="bin" />
+		<mkdir dir="dist" />
+	</target>
+	<target name="compile" depends="init">
+		<echo message="Compile ${ant.project.name} project." />
+		<echo message="Scope of this target:" />
+		<javac srcdir="src" destdir="bin" includeantruntime="false" classpathref="lib.cp"/>
+	</target>
+	<target name="copy" depends="init">
+		<echo message="Copy static contents of ${ant.project.name} project." />
+		<echo message="Scope of this target:" />
+		<copy todir="bin">
+			<fileset dir="res"/>
+		</copy>
+	</target>
+	<target name="dist" depends="compile,copy,init">
+		<echo message="Prepare the jar for distribution of ${ant.project.name} project." />
+		<echo message="Scope of this target:" />
+		<jar destfile="bank.jar">
+			<fileset dir="bin"/>
+		</jar>
+	</target>
+	<target name="clean">
+		<echo message="Remove project ${ant.project.name} binary files." />
+		<echo message="Scope of this target:" />
+		<delete dir="bin" />
+	</target>
+	<target name="clean-all" depends="clean">
+		<echo message="Delete all executable files of the ${ant.project.name} project." />
+		<echo message="Scope of this target:" />
+		<delete dir="dist" />
+	</target>
+	<target name="run" depends="dist">
+		<echo message="Run ${ant.project.name} project." />
+		<echo message="Scope of this target:" />
+		<java classname="put.io.selenium.atm.SimpleServer" classpathref="dist.cp"/>
+	</target>
+</project>
