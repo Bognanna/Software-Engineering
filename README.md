@@ -1,3 +1,2 @@
 # SE-2022
-Bogna Kilanowska 148252
-Artificial Intelligence 
+This repository contains result of my work on SE mini-projects.
